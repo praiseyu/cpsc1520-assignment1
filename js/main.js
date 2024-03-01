@@ -1,84 +1,113 @@
 // references for album title
 // reference for album description
 // referenece for album art
-const albumTitle = document.getElementById('album-title');
-const albumDescription = document.getElementById('album-description');
-const albumArt = document.getElementById('album-art');
+const albumTitle = document.getElementById("album-title");
+const albumDescription = document.getElementById("album-description");
+const albumArt = document.getElementById("album-art");
 
-const template = `<div class="col">
-<div class="card shadow-sm">
-    <img class="bd-placeholder-img card-img-top" src="ALBUM IMAGE SELECTION HERE" />
-    <div class="card-body">
-        <h5 class="card-title">${albumTitle}</h5>
-        <p class="card-text">${albumDescription}</p>
-    </div>
-</div>
-</div>`
+// event listener for album title on INPUT. adds invalid class if > 15 characaters
+albumTitle.addEventListener("input", onInputTitle);
 
-console.log(albumTitle);
-console.log(albumDescription);
-console.log(albumArt);
+function onInputTitle(e) {
+  const inputTitle = e.currentTarget.value;
 
-// if element fails, then add "is-invalid" class, once fixed, remove "is-invalid" class
-// validate album title
-// validate album description
-// validate album art
-
-
-// on input event for ALBUM title, title invalid if name >15 characters
-albumTitle.addEventListener('input', onInputTitle);
-
-function onInputTitle(e){
-    const inputTitle = e.currentTarget.value;
-    
-    if(inputTitle.length > 0){
-       e.currentTarget.classList.remove('is-invalid');
-    }
-
-    if(inputTitle.length === 20){
-        e.currentTarget.classList.add('is-valid');
-    }
+  if (inputTitle.length > 15) {
+    e.currentTarget.classList.add("is-invalid");
+  } else {
+    e.currentTarget.classList.remove("is-invalid");
+  }
 }
 
-// on input event for ALBUM NAME, name invalid if > 30 characters
-albumDescription.addEventListener('input', onInputDescription);
+// event listener for album description on INPUT. adds invalid class if > 30 characters
+albumDescription.addEventListener("input", onInputDescription);
 
-function onInputDescription(e){
-    const inputDescription = e.currentTarget.value;
-    
-    if(inputDescription.length > 0){
-       e.currentTarget.classList.remove('is-invalid');
-    }
+function onInputDescription(e) {
+  const inputDescription = e.currentTarget.value;
 
-    if(inputTitle.length === 40){
-        e.currentTarget.classList.add('is-valid');
-    }
+  if (inputDescription.length > 30) {
+    e.currentTarget.classList.add("is-invalid");
+  } else {
+    e.currentTarget.classList.remove("is-invalid");
+  }
 }
 
+// event listener for select art on CHANGE. checks if non-default option is selcted
+albumArt.addEventListener("change", onSelectArt);
 
-// on CHANGE event for art, invalid if the SELECT ELEMENT OPTION VALUE returns the text "Select album art"
-// submit event: validate empty TITLE, validate empty ALBUM DESCRIPTION
-document.querySelector('#album-form').addEventListener('submit', onValidateForm);
+function onSelectArt(e) {
+  const selectedArt = e.currentTarget.value;
 
-function onValidateForm(e){
-    e.preventDefault();
-    isEmpty(e.currentTarget.elements['album-title'].value)
+  if (selectedArt === "") {
+    e.currentTarget.classList.add("is-invalid");
+  } else {
+    e.currentTarget.classList.remove("is-invalid");
+  }
 }
 
-// is empty or not? 
-function isEmpty(inputText){
-    const validate = inputText.trim();
-    console.log(validate);
-    if(validate === ''){
-        console.log('This is an empty string');
-    }
+document
+  .querySelector("#album-form")
+  .addEventListener("submit", onValidateForm);
+
+function onValidateForm(e) {
+  e.preventDefault();
+  const currentTitle = e.currentTarget.elements["album-title"].value;
+  const currentDescription =
+    e.currentTarget.elements["album-description"].value;
+  const currentArt = e.currentTarget.elements["album-art"].value;
+  if (currentTitle === "") {
+    albumTitle.classList.add("is-invalid");
+  }
+
+  if (currentDescription === "") {
+    albumDescription.classList.add("is-invalid");
+  }
+
+  if (currentArt === "") {
+    albumArt.classList.add("is-invalid");
+  }
+
+  if (currentTitle !== "" && currentDescription !== "" && currentArt !== "") {
+    renderAlbum(e);
+    document.getElementById("album-form").reset();
+  }
+}
+
+// is empty or not?
+function isEmpty(inputText) {
+  const validate = inputText.trim();
+
+  if (validate === "") {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 // once values are validated, then save button works
 
-// on save, a card is created: 
+// on save, a card is created:
 
+function renderAlbum(event) {
+  const inputTitle = event.currentTarget.elements["album-title"].value;
+  const inputDescription =
+    event.currentTarget.elements["album-description"].value;
+  const inputArt = event.currentTarget.elements["album-art"].value;
 
-// reset 
+  const template = `<div class="col">
+    
+    <div class="card shadow-sm">
+        <img class="bd-placeholder-img card-img-top" src="img/${inputArt}" />
+        <div class="card-body">
+            <h5 class="card-title">${inputTitle}</h5>
+            <p class="card-text">${inputDescription}</p>
+        </div>
+    </div>
+    </div>`;
+  document
+    .querySelector("#all-albums-list")
+    .insertAdjacentHTML("afterbegin", template);
+}
+
+// reset
 // album title has to have class: is-invalid
 // description has to have class: is-invalid
