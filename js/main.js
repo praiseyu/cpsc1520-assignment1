@@ -1,99 +1,81 @@
-// references for album title
-// reference for album description
-// referenece for album art
-const albumTitle = document.getElementById("album-title");
-const albumDescription = document.getElementById("album-description");
-const albumArt = document.getElementById("album-art");
+// global references
+const albumTitle = document.getElementById('album-title');
+const albumDescription = document.getElementById('album-description');
+const albumArt = document.getElementById('album-art');
 
-// event listener for album title on INPUT. adds invalid class if > 15 characaters
-albumTitle.addEventListener("input", onInputTitle);
+//event listeners
+albumTitle.addEventListener('input', onInputTitle);
+albumDescription.addEventListener('input', onInputDescription);
+albumArt.addEventListener('change', onSelectArt);
+document.querySelector('#album-form').addEventListener('submit', onValidateForm);
 
+//FUNCTIONS
+// adds invalid class if album title > 15 characaters
 function onInputTitle(e) {
-  const inputTitle = e.currentTarget.value;
+    const inputTitle = e.currentTarget.value;
 
-  if (inputTitle.length > 15) {
-    e.currentTarget.classList.add("is-invalid");
-  } else {
-    e.currentTarget.classList.remove("is-invalid");
-  }
+    if (inputTitle.length > 15) {
+        e.currentTarget.classList.add('is-invalid');
+    } else {
+        e.currentTarget.classList.remove('is-invalid');
+    }
 }
 
-// event listener for album description on INPUT. adds invalid class if > 30 characters
-albumDescription.addEventListener("input", onInputDescription);
-
+//adds invalid class if album description > 30 characters
 function onInputDescription(e) {
-  const inputDescription = e.currentTarget.value;
+    const inputDescription = e.currentTarget.value;
 
-  if (inputDescription.length > 30) {
-    e.currentTarget.classList.add("is-invalid");
-  } else {
-    e.currentTarget.classList.remove("is-invalid");
-  }
+    if (inputDescription.length > 30) {
+        e.currentTarget.classList.add('is-invalid');
+    } else {
+        e.currentTarget.classList.remove('is-invalid');
+    }
 }
 
-// event listener for select art on CHANGE. checks if non-default option is selcted
-albumArt.addEventListener("change", onSelectArt);
-
+// adds invalid class if default option is selcted
 function onSelectArt(e) {
-  const selectedArt = e.currentTarget.value;
+    const selectedArt = e.currentTarget.value;
 
-  if (selectedArt === "") {
-    e.currentTarget.classList.add("is-invalid");
-  } else {
-    e.currentTarget.classList.remove("is-invalid");
-  }
+    if (selectedArt === '') {
+        e.currentTarget.classList.add('is-invalid');
+    } else {
+        e.currentTarget.classList.remove('is-invalid');
+    }
 }
 
-document
-  .querySelector("#album-form")
-  .addEventListener("submit", onValidateForm);
-
+// validating input fields and submission of form
 function onValidateForm(e) {
-  e.preventDefault();
-  const currentTitle = e.currentTarget.elements["album-title"].value;
-  const currentDescription =
-    e.currentTarget.elements["album-description"].value;
-  const currentArt = e.currentTarget.elements["album-art"].value;
-  if (currentTitle === "") {
-    albumTitle.classList.add("is-invalid");
-  }
+    e.preventDefault();
+    const currentTitle = e.currentTarget.elements['album-title'].value;
+    const currentDescription =
+        e.currentTarget.elements['album-description'].value;
+    const currentArt = e.currentTarget.elements['album-art'].value;
+    if (currentTitle === '') {
+        albumTitle.classList.add('is-invalid');
+    }
 
-  if (currentDescription === "") {
-    albumDescription.classList.add("is-invalid");
-  }
+    if (currentDescription === '') {
+        albumDescription.classList.add('is-invalid');
+    }
 
-  if (currentArt === "") {
-    albumArt.classList.add("is-invalid");
-  }
+    if (currentArt === '') {
+        albumArt.classList.add('is-invalid');
+    }
 
-  if (currentTitle !== "" && currentDescription !== "" && currentArt !== "") {
-    renderAlbum(e);
-    document.getElementById("album-form").reset();
-  }
+    if (currentTitle !== '' && currentDescription !== '' && currentArt !== '') {
+        renderAlbum(e);
+        document.getElementById('album-form').reset();
+    }
 }
 
-// is empty or not?
-function isEmpty(inputText) {
-  const validate = inputText.trim();
-
-  if (validate === "") {
-    return true;
-  } else {
-    return false;
-  }
-}
-
-// once values are validated, then save button works
-
-// on save, a card is created:
-
+// renders a card for the album containing album title, album description, and album art
 function renderAlbum(event) {
-  const inputTitle = event.currentTarget.elements["album-title"].value;
-  const inputDescription =
-    event.currentTarget.elements["album-description"].value;
-  const inputArt = event.currentTarget.elements["album-art"].value;
+    const inputTitle = event.currentTarget.elements['album-title'].value;
+    const inputDescription =
+        event.currentTarget.elements['album-description'].value;
+    const inputArt = event.currentTarget.elements['album-art'].value;
 
-  const template = `<div class="col">
+    const template = `<div class="col">
     
     <div class="card shadow-sm">
         <img class="bd-placeholder-img card-img-top" src="img/${inputArt}" />
@@ -103,11 +85,5 @@ function renderAlbum(event) {
         </div>
     </div>
     </div>`;
-  document
-    .querySelector("#all-albums-list")
-    .insertAdjacentHTML("afterbegin", template);
+    document.querySelector('#all-albums-list').insertAdjacentHTML('afterbegin', template);
 }
-
-// reset
-// album title has to have class: is-invalid
-// description has to have class: is-invalid
